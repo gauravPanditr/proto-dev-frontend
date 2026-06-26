@@ -2,6 +2,7 @@ import { Editor } from '@monaco-editor/react';
 import React, { useEffect, useState } from 'react';
 import { useActiveFileTabStore } from '../../../store/activeFileTabStore';
 import { useEditorSocketStore } from '../../../store/editorSocketStore';
+import { extensionToFileType } from '../../../utils/extensionToFileType';
 
 const EditorComponent = () => {
     const [editorState, setEditorState] = useState({
@@ -42,15 +43,19 @@ const EditorComponent = () => {
         downloadTheme();
     }, []);
 
+
     return (
         <>
             {editorState.theme && (
                 <Editor
-                    defaultLanguage="javascript"
+               
+               language={extensionToFileType(activeFileTab?.extension)}
+                    defaultLanguage={undefined}
                     value={
                         activeFileTab?.value ||
                         "// Welcome to the playground"
                     }
+                     
                     onChange={handleChange}
                     height="100vh"
                     width="100%"
@@ -59,6 +64,7 @@ const EditorComponent = () => {
                         fontSize: 18,
                         fontFamily: 'monospace'
                     }}
+                    
                 />
             )}
         </>
