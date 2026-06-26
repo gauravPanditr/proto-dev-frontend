@@ -4,15 +4,24 @@ import EditorComponent from '../components/molecules/EditorComponent/EditorCompo
 import {EditorButton} from '../components/atoms/EditorButton/EditorButton';
 import TreeStructure from '../components/organism/TreeStructure/TreeStructure';
 import { useTreeStructureStore } from '../store/treeStructureStroe';
-
+import { useEditorSokcetStore } from '../store/editorSocketStore';
+import {io} from "socket.io-client";
 export const ProjectPlayground = () => {
     const {projectId:projectIdfromURL}=useParams();
     const {setProjectId,projectId}=useTreeStructureStore();
+    const {setEditorSocket}=useEditorSokcetStore();
    useEffect(()=>{
+    if(projectIdfromURL)
     setProjectId(projectIdfromURL);
-   },[setProjectId,projectIdfromURL]);
+        const editorSocketConn = io(`${import.meta.env.VITE_BACKEND_URL}/editor`, {
+                query: {
+                    projectId: projectIdfromURL
+                }
+            });
+             setEditorSocket(editorSocketConn);
+   },[setProjectId,projectIdfromURL,setEditorSocket]);
     
-
+  
   return (
     <>
   <div style={{ display: "flex" }}>

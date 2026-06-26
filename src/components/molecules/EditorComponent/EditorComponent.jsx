@@ -1,46 +1,69 @@
-import { Editor } from '@monaco-editor/react'
-import React, { useEffect, useState } from 'react'
-import { data } from 'react-router-dom';
+import { Editor } from "@monaco-editor/react";
+import React, { useEffect, useState } from "react";
+import { useEditorSokcetStore } from "../../../store/editorSocketStore";
+import { useActiveFileTabStore } from "../../../store/activeFileTabStore";
 
 const EditorComponent = () => {
-
-    const [editorState,setEditorState]=useState({
-        theme:null
+    const [editorState, setEditorState] = useState({
+        theme: null,
     });
-    
+
+    const { editorSocket } = useEditorSokcetStore();
+    const { activeFileTab, setActiveFileTab } = useActiveFileTabStore();
+
     async function downloadTheme() {
-        const response = await fetch('/Dracula.json');
+        const response = await fetch("/Dracula.json");
         const data = await response.json();
-        console.log(data);
-        setEditorState({ ...editorState, theme: data });
-    }
- function handleEditorTheme(editor, monaco) {
-        monaco.editor.defineTheme('dracula', editorState.theme);
-        monaco.editor.setTheme('dracula');
+
+        setEditorState(prev => ({
+            ...prev,
+            theme: data,
+        }));
     }
 
-        useEffect(() => {
+    function handleEditorTheme(editor, monaco) {
+        monaco.editor.defineTheme("dracula", editorState.theme);
+        monaco.editor.setTheme("dracula");
+    }
+
+    useEffect(() => {
         downloadTheme();
     }, []);
-  return (
-   <>
-  { editorState.theme && <Editor
-  
-    defaultLanguage='javascript'
-    defaultValue='// welcome to playground'
-    height={'100vh'}
-    width={'100%'}
-    onMount={handleEditorTheme}
-    options={{
-        fontSize:18,
-        fontFamily:'monospace'
-    }}
-    >
 
-   </Editor>
-}
-   </>
-  )
-}
+    useEffect(() => {
+        if (!editorSocket) return;
 
-export default EditorComponent
+        const handler = (data) => {
+            setActiveFileTab(data.path, data.value);
+        };
+
+        editorSocket.on("readFileSuccess", handler);
+
+        return () => {
+            editorSocket.off("readFileSuccess", handler);
+        };
+    }, [editorSocket]);
+
+    return (
+        <>
+            {editorState.theme && (
+                <Editor
+                    value={
+                        activeFileTab?.value ||
+                        "// Welcome to the playground"
+                    }
+                    defaultLanguage="javascript"
+                    height="100vh"
+                    width="100%"
+                    onMount={handleEditorTheme}
+                    options={{
+                        fontSize: 18,
+                        fontFamily: "monospace",
+                    }}
+                />
+            )}
+        </>
+    );
+};
+
+export default EditorComponent;

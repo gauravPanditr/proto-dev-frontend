@@ -17,9 +17,10 @@ const TreeStructure = () => {
   return (
     <div>
   <h2 color='white'>Tree Structure</h2>
-  <TreeNode fileFolderData={treeStructure.data}></TreeNode>
+ {treeStructure?.data && (
+    <TreeNode fileFolderData={treeStructure.data} />
+)}
     </div>
   )
 }
-
 export default TreeStructure
