@@ -4,12 +4,12 @@ import EditorComponent from '../components/molecules/EditorComponent/EditorCompo
 import {EditorButton} from '../components/atoms/EditorButton/EditorButton';
 import TreeStructure from '../components/organism/TreeStructure/TreeStructure';
 import { useTreeStructureStore } from '../store/treeStructureStroe';
-import { useEditorSokcetStore } from '../store/editorSocketStore';
+import { useEditorSocketStore } from '../store/editorSocketStore';
 import {io} from "socket.io-client";
 export const ProjectPlayground = () => {
     const {projectId:projectIdfromURL}=useParams();
     const {setProjectId,projectId}=useTreeStructureStore();
-    const {setEditorSocket}=useEditorSokcetStore();
+    const {setEditorSocket}=useEditorSocketStore();
    useEffect(()=>{
     if(projectIdfromURL)
     setProjectId(projectIdfromURL);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { FileIcon } from "../../atoms/FileIcon/FileIcon";
-import { useEditorSokcetStore } from "../../../store/editorSocketStore";
+import { useEditorSocketStore } from "../../../store/editorSocketStore";
 
 
 
@@ -11,7 +11,7 @@ export const TreeNode = ({
 
     const [visibility, setVisibility] = useState({});
 
-    const {editorSocket}=useEditorSokcetStore();
+    const {editorSocket}=useEditorSocketStore();
 
     function toggleVisibility(name) {
         setVisibility({
