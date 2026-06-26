@@ -28,7 +28,7 @@ const EditorComponent = () => {
   
     defaultLanguage='javascript'
     defaultValue='// welcome to playground'
-    height={'88vh'}
+    height={'100vh'}
     width={'100%'}
     onMount={handleEditorTheme}
     options={{
