@@ -15,6 +15,7 @@
     "@xterm/addon-attach": "^0.12.0",
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/xterm": "^6.0.0",
+    "antd": "^6.4.5",
     "axios": "^1.18.1",
     "directory-tree": "^3.6.0",
     "react": "^19.2.7",

@@ -8,10 +8,15 @@ import { useEditorSocketStore } from '../store/editorSocketStore';
 import {io} from "socket.io-client";
 
 import BrowserTerminal from '../components/molecules/BrowserTerminal/BrowserTerminal';
+import { useTerminalSocketStore } from '../store/terminalSocketStore';
+import Browser from '../components/organism/Browser/Browser';
+import { usePortStore } from '../store/portStore';
 export const ProjectPlayground = () => {
     const {projectId:projectIdfromURL}=useParams();
     const {setProjectId,projectId}=useTreeStructureStore();
-    const {setEditorSocket}=useEditorSocketStore();
+    const {setEditorSocket,editorSocket}=useEditorSocketStore();
+    const {  terminalSocket,setTerminalSocket } = useTerminalSocketStore();
+    
    useEffect(()=>{
     if(projectIdfromURL)
     setProjectId(projectIdfromURL);
@@ -20,8 +25,20 @@ export const ProjectPlayground = () => {
                     projectId: projectIdfromURL
                 }
             });
+
+                try {
+                const ws = new WebSocket("ws://localhost:4000/terminal?projectId="+projectIdfromURL);
+                setTerminalSocket(ws);
+                
+            } catch(error) {
+                console.log("error in ws", error);
+            }
+            // if(terminalSocket){
+            //     terminalSocket?.emit("getPort",{containerName:projectIdfromURL})
+            // }
+
              setEditorSocket(editorSocketConn);
-   },[setProjectId,projectIdfromURL,setEditorSocket]);
+   },[setProjectId,projectIdfromURL,setEditorSocket,setTerminalSocket]);
     
   
   return (
@@ -50,6 +67,9 @@ export const ProjectPlayground = () => {
 <EditorButton isActive={true} />
   <div>
      <BrowserTerminal/>   
+    </div>
+    <div>
+       {projectIdfromURL && terminalSocket &&<Browser projectId={projectIdfromURL}/>}
     </div>
     </>
   
