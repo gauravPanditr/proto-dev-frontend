@@ -38,10 +38,10 @@ export const useEditorSocketStore = create((set) => ({
                 data.value
             );
         });
-          incomingSocket?.on("getPortSuccess", ({ port }) => {
-            console.log("port data", port);
-            portSetter(port);
-        })
+        //   incomingSocket?.on("getPortSuccess", ({ port }) => {
+        //     console.log("port data", port);
+        //     portSetter(port);
+        // })
 
         set({
             editorSocket: incomingSocket,

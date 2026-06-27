@@ -9,8 +9,9 @@ import {io} from "socket.io-client";
 
 import BrowserTerminal from '../components/molecules/BrowserTerminal/BrowserTerminal';
 import { useTerminalSocketStore } from '../store/terminalSocketStore';
-import Browser from '../components/organism/Browser/Browser';
+
 import { usePortStore } from '../store/portStore';
+import { Browser } from '../components/organism/Browser/Browser';
 export const ProjectPlayground = () => {
     const {projectId:projectIdfromURL}=useParams();
     const {setProjectId,projectId}=useTreeStructureStore();
